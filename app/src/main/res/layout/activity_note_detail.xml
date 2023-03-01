@@ -5,12 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NoteDetailActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:title="Edition de la note"
+        android:id="@+id/detail_toolbar"
+        android:background="?android:attr/colorPrimary"
+        />
+
     <EditText
         android:hint="Titre de ma note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/detail_title_text"
         style="@style/TitleFont"
+        android:layout_below="@+id/detail_toolbar"
         />
 
     <EditText

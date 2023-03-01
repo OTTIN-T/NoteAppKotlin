@@ -6,11 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".NoteListActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:title="M2i NoteApp"
+        android:id="@+id/toolbar"
+        android:background="?android:attr/colorPrimary"
+    />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/notes_recycler_view"
         tools:listitem="@layout/item_note"
+        android:layout_below="@+id/toolbar"
         />
 
 </RelativeLayout>

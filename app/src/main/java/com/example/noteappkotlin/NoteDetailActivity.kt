@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.Toolbar
 
 class NoteDetailActivity : AppCompatActivity() {
 
@@ -23,6 +24,10 @@ class NoteDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_detail)
+
+        val toolbar = findViewById<Toolbar>(R.id.detail_toolbar)
+        setSupportActionBar(toolbar)
+
         note = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     intent.getParcelableExtra(EXTRA_NOTE, Note::class.java)!!
                 } else {
