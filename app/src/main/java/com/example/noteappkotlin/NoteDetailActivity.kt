@@ -18,6 +18,8 @@ class NoteDetailActivity : AppCompatActivity() {
         val REQUEST_EDIT_NOTE = 1
         val EXTRA_NOTE = "note"
         val EXTRA_NOTE_INDEX = "noteIndex"
+        val ACTION_SAVE_NOTE = "com.example.noteappkotlin.actions.ACTION_SAVE_NOTE"
+        val ACTION_DELETE_NOTE = "com.example.noteappkotlin.actions.ACTION_DELETE_NOTE"
     }
 
     lateinit var note: Note
@@ -59,18 +61,46 @@ class NoteDetailActivity : AppCompatActivity() {
                 saveNote()
                 true
             }
+            R.id.action_delete -> {
+                showConfirmDeleteNoteDialog()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showConfirmDeleteNoteDialog() {
+
+        val confirmFragment = note.title?.let { ConfirmDeleteNoteFragment(it) }
+        confirmFragment
+        confirmFragment?.listener = object: ConfirmDeleteNoteFragment.ConfirmDeleteDialogListener{
+            override fun onDialogPositiveClick() {
+                deleteNote()
+            }
+
+            override fun onDialogNegativeClick() {}
+        }
+
+        confirmFragment?.show(supportFragmentManager, "confirmDeleteDialog")
+    }
+
+    private fun deleteNote() {
+        intent = Intent(ACTION_DELETE_NOTE)
+        intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     private fun saveNote() {
         note.title = titleView.text.toString()
         note.text = titleView.text.toString()
 
-        intent = Intent()
+        intent = Intent(ACTION_SAVE_NOTE)
         intent.putExtra(EXTRA_NOTE, note)
         intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
+
+
 }
