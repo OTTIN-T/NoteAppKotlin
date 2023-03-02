@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -25,10 +26,6 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         findViewById<FloatingActionButton>(R.id.create_note).setOnClickListener(this)
 
         notes = mutableListOf<Note>()
-        notes.add(Note("Note 1", "C'est quoi un recycle view ?"))
-        notes.add(Note("Mémo A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non fermentum nunc, id vehicula erat. Ut in pharetra lectus. Aliquam consectetur interdum eros, a fermentum justo sagittis et. Sed et erat vitae ex tempor condimentum."))
-        notes.add(Note("Mémo B", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non fermentum nunc, id vehicula erat. Ut in pharetra lectus. Aliquam consectetur interdum eros, a fermentum justo sagittis et. Sed et erat vitae ex tempor condimentum."))
-        notes.add(Note("Dernier mémo", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non fermentum nunc, id vehicula erat. Ut in pharetra lectus. Aliquam consectetur interdum eros, a fermentum justo sagittis et. Sed et erat vitae ex tempor condimentum."))
 
         adapter = NoteAdapter(notes, this)
 
@@ -106,7 +103,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         val intent = Intent(this, NoteDetailActivity::class.java)
-        intent.putExtra(NoteDetailActivity.EXTRA_NOTE, note)
+        intent.putExtra(NoteDetailActivity.EXTRA_NOTE, note as Parcelable)
         intent.putExtra(NoteDetailActivity.EXTRA_NOTE_INDEX, noteIndex)
         startActivityForResult(intent, NoteDetailActivity.REQUEST_EDIT_NOTE)
     }
