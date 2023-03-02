@@ -1,6 +1,8 @@
 package com.example.noteappkotlin
 
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,9 +34,36 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         recyclerView.adapter = adapter
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode != Activity.RESULT_OK || data == null) {
+            return
+        }
+
+        when(requestCode) {
+            NoteDetailActivity.REQUEST_EDIT_NOTE -> processEditNoteResult(data)
+        }
+    }
+
+    private fun processEditNoteResult(data: Intent) {
+        val noteIndex = data.getIntExtra(NoteDetailActivity.EXTRA_NOTE_INDEX, -1)
+        val note = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        data.getParcelableExtra(NoteDetailActivity.EXTRA_NOTE, Note::class.java)
+                    } else {
+                        data.getParcelableExtra<Note>(NoteDetailActivity.EXTRA_NOTE)
+                    }
+        saveNote(note, noteIndex)
+    }
+
+    private fun saveNote(note: Note?, noteIndex: Int) {
+        if(note != null) {
+            notes[noteIndex] = note
+        }
+        adapter.notifyDataSetChanged()
+    }
+
     override fun onClick(view: View?) {
         if(view?.tag != null) {
-            Log.i("NoteActivity", "Note de ma list")
             showNoteDetail(view.tag as Int)
         }
     }
@@ -44,6 +73,6 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         val intent = Intent(this, NoteDetailActivity::class.java)
         intent.putExtra(NoteDetailActivity.EXTRA_NOTE, note)
         intent.putExtra(NoteDetailActivity.EXTRA_NOTE_INDEX, noteIndex)
-        startActivity(intent)
+        startActivityForResult(intent, NoteDetailActivity.REQUEST_EDIT_NOTE)
     }
 }
