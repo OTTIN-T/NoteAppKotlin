@@ -11,6 +11,8 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.noteappkotlin.utils.loadNotes
+import com.example.noteappkotlin.utils.persistNote
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteListActivity : AppCompatActivity(), View.OnClickListener {
@@ -25,7 +27,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
         findViewById<FloatingActionButton>(R.id.create_note).setOnClickListener(this)
 
-        notes = mutableListOf<Note>()
+        notes = loadNotes(this)
 
         adapter = NoteAdapter(notes, this)
 
@@ -67,12 +69,13 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         if(noteIndex < 0) {
             return
         }
-        notes.removeAt(noteIndex)
-
+        val note = notes.removeAt(noteIndex)
+        com.example.noteappkotlin.utils.deleteNote(this, note)
         adapter.notifyDataSetChanged()
     }
 
     private fun saveNote(note: Note, noteIndex: Int) {
+        persistNote(this, note)
         if(noteIndex < 0) {
             notes.add(0, note)
         } else {
